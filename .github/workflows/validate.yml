@@ -1,0 +1,20 @@
+name: Validate
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: debian:trixie
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install build dependencies
+        run: |
+          apt-get update -qq
+          apt-get install -y --no-install-recommends build-essential debhelper gpg lintian
+      - name: Build
+        run: dpkg-buildpackage -b -uc -us
+      - name: Lintian
+        run: lintian --fail-on error ../*.changes

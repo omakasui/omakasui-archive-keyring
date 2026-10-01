@@ -1,0 +1,11 @@
+/build/
+/debian/.debhelper/
+/debian/omakasui-archive-keyring/
+/debian/omakasui-core-archive-keyring/
+/debian/*.debhelper.log
+/debian/*.substvars
+/debian/files
+/debian/debhelper-build-stamp
+/*.deb
+/*.buildinfo
+/*.changes

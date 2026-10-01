@@ -1,0 +1,27 @@
+#!/usr/bin/make -f
+
+# Pinned fingerprints: the build fails if an armored key does not match.
+FPR_omakasui-core     := 2C32DFACE7D42F5540316649E53F51CB4D5E06DF
+FPR_omakasui-packages := 8FD94FD8253906F6366878368A0351B499A0E7A4
+
+KEYS := omakasui-core omakasui-packages
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	mkdir -p build
+	set -e; for key in $(KEYS); do \
+	  case $$key in \
+	    omakasui-core) expected=$(FPR_omakasui-core) ;; \
+	    omakasui-packages) expected=$(FPR_omakasui-packages) ;; \
+	  esac; \
+	  actual=$$(gpg --show-keys --with-colons $$key.gpg.key | awk -F: '$$1 == "fpr" { print $$10; exit }'); \
+	  if [ "$$actual" != "$$expected" ]; then \
+	    echo "$$key.gpg.key: fingerprint $$actual, expected $$expected" >&2; exit 1; \
+	  fi; \
+	  gpg --dearmor < $$key.gpg.key > build/$$key.gpg; \
+	done
+
+override_dh_auto_clean:
+	rm -rf build

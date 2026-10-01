@@ -1,0 +1,26 @@
+Source: omakasui-archive-keyring
+Section: misc
+Priority: optional
+Maintainer: Luca Pattocchio <info@lucapattocchio.dev>
+Standards-Version: 4.7.2
+Build-Depends: debhelper-compat (= 13), gpg
+Rules-Requires-Root: no
+Homepage: https://github.com/omakasui/keyrings
+
+Package: omakasui-archive-keyring
+Architecture: all
+Multi-Arch: foreign
+Depends: ${misc:Depends}
+Description: GPG keyring for the Omakasui packages repository
+ Provides the public key used to authenticate packages from
+ packages.omakasui.org, installed as /usr/share/keyrings/omakasui-packages.gpg.
+
+Package: omakasui-core-archive-keyring
+Architecture: all
+Multi-Arch: foreign
+Depends: ${misc:Depends}
+Replaces: omakasui-archive-keyring (<< 1.1.0)
+Breaks: omakasui-archive-keyring (<< 1.1.0)
+Description: GPG keyring for the Omakasui core repository
+ Provides the public key used to authenticate packages from
+ core.omakasui.org, installed as /usr/share/keyrings/omakasui-core.gpg.

@@ -1,0 +1,9 @@
+omakasui-archive-keyring (1.1.0) unstable; urgency=medium
+
+  * Move the source to github.com/omakasui/keyrings; keys are shipped from
+    the repository instead of being fetched at build time.
+  * Split into one keyring per repository: omakasui-archive-keyring now
+    ships only omakasui-packages.gpg, omakasui-core-archive-keyring ships
+    omakasui-core.gpg.
+
+ -- Luca Pattocchio <info@lucapattocchio.dev>  Thu, 01 Oct 2026 00:00:00 +0200
