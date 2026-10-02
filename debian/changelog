@@ -1,3 +1,11 @@
+omakasui-archive-keyring (1.2.1) unstable; urgency=medium
+
+  * Move aside a hand-written *.sources before unpacking.
+  * Keep the -dev channel of the replaced manual setup (.list or .sources).
+  * Remove the copy of the key in /etc/apt/trusted.gpg.d/.
+
+ -- Luca Pattocchio <info@lucapattocchio.dev>  Fri, 02 Oct 2026 15:20:00 +0200
+
 omakasui-archive-keyring (1.2.0) unstable; urgency=medium
 
   * Moving from .list to .sources.
