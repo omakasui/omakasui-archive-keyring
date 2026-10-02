@@ -1,0 +1,15 @@
+#!/bin/sh
+set -e
+
+# Move aside a source written by hand before this package shipped it, so dpkg
+# installs the conffile without prompting. postinst keeps its dev channel.
+if [ "$1" = install ] || [ "$1" = upgrade ]; then
+	src=/etc/apt/sources.list.d/omakasui-core.sources
+	if [ -f "$src" ] && ! dpkg-query -S "$src" >/dev/null 2>&1; then
+		mv "$src" "$src.bak"
+	fi
+fi
+
+#DEBHELPER#
+
+exit 0

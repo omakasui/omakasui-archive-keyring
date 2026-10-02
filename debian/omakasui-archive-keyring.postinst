@@ -1,12 +1,28 @@
 #!/bin/sh
 set -e
 
-# Disable the one-line source written by the old manual setup, now replaced
-# by /etc/apt/sources.list.d/omakasui.sources.
 if [ "$1" = configure ]; then
-	legacy=/etc/apt/sources.list.d/omakasui.list
-	if [ -f "$legacy" ] && grep -q 'packages.omakasui.org' "$legacy"; then
+	dir=/etc/apt/sources.list.d
+
+	# Disable the one-line source written by the old manual setup, now
+	# replaced by $dir/omakasui.sources.
+	legacy=$dir/omakasui.list
+	if [ -f "$legacy" ] && grep -q 'packages\.omakasui\.org' "$legacy"; then
 		mv "$legacy" "$legacy.bak"
+	fi
+
+	# Keep the dev channel of the replaced manual setup, once.
+	if [ -z "$2" ] || dpkg --compare-versions "$2" lt 1.2.1; then
+		if grep -Eqs 'packages\.omakasui\.org/?[a-z]* +[a-z]+-dev |^Suites: *[a-z]+-dev' "$legacy.bak" "$dir/omakasui.sources.bak"; then
+			sed -i 's/^Suites: *\([a-z]*\)$/Suites: \1-dev/' "$dir/omakasui.sources"
+		fi
+	fi
+
+	# Drop the copy of the key from the old manual setup: it is the same key
+	# as /usr/share/keyrings/omakasui-packages.gpg, but trusted for every repository.
+	old=/etc/apt/trusted.gpg.d/omakasui-packages.gpg
+	if [ -f "$old" ] && cmp -s "$old" /usr/share/keyrings/omakasui-packages.gpg; then
+		rm -f "$old"
 	fi
 fi
 

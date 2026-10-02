@@ -1,12 +1,28 @@
 #!/bin/sh
 set -e
 
-# Disable the one-line source written by the old manual setup, now replaced
-# by /etc/apt/sources.list.d/omakasui-core.sources.
 if [ "$1" = configure ]; then
-	legacy=/etc/apt/sources.list.d/omakasui-core.list
-	if [ -f "$legacy" ] && grep -q 'core.omakasui.org' "$legacy"; then
+	dir=/etc/apt/sources.list.d
+
+	# Disable the one-line source written by the old manual setup, now
+	# replaced by $dir/omakasui-core.sources.
+	legacy=$dir/omakasui-core.list
+	if [ -f "$legacy" ] && grep -q 'core\.omakasui\.org' "$legacy"; then
 		mv "$legacy" "$legacy.bak"
+	fi
+
+	# Keep the dev channel of the replaced manual setup, once.
+	if [ -z "$2" ] || dpkg --compare-versions "$2" lt 1.2.1; then
+		if grep -Eqs 'core\.omakasui\.org/?[a-z]* +[a-z]+-dev |^Suites: *[a-z]+-dev' "$legacy.bak" "$dir/omakasui-core.sources.bak"; then
+			sed -i 's/^Suites: *\([a-z]*\)$/Suites: \1-dev/' "$dir/omakasui-core.sources"
+		fi
+	fi
+
+	# Drop the copy of the key from the old manual setup: it is the same key
+	# as /usr/share/keyrings/omakasui-core.gpg, but trusted for every repository.
+	old=/etc/apt/trusted.gpg.d/omakasui-core.gpg
+	if [ -f "$old" ] && cmp -s "$old" /usr/share/keyrings/omakasui-core.gpg; then
+		rm -f "$old"
 	fi
 fi
 
