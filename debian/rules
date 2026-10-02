@@ -6,6 +6,12 @@ FPR_omakasui-packages := 8FD94FD8253906F6366878368A0351B499A0E7A4
 
 KEYS := omakasui-core omakasui-packages
 
+# Target of the shipped .sources files. Both default to the build environment,
+# since each suite's package is built in a container of that distro.
+OS_ID   := $(shell . /etc/os-release && echo $$ID)
+SUITE   ?= $(shell . /etc/os-release && echo $$VERSION_CODENAME)
+PRODUCT ?= $(if $(filter debian,$(OS_ID)),omadeb,$(if $(filter ubuntu,$(OS_ID)),omabuntu))
+
 %:
 	dh $@
 
@@ -21,6 +27,13 @@ override_dh_auto_build:
 	    echo "$$key.gpg.key: fingerprint $$actual, expected $$expected" >&2; exit 1; \
 	  fi; \
 	  gpg --dearmor < $$key.gpg.key > build/$$key.gpg; \
+	done
+	@if [ -z "$(SUITE)" ] || [ -z "$(PRODUCT)" ]; then \
+	  echo "cannot determine SUITE/PRODUCT (os-release ID: $(OS_ID)); pass them explicitly" >&2; exit 1; \
+	fi
+	set -e; for src in omakasui omakasui-core; do \
+	  sed -e 's/@SUITE@/$(SUITE)/' -e 's/@PRODUCT@/$(PRODUCT)/' \
+	    debian/$$src.sources.in > build/$$src.sources; \
 	done
 
 override_dh_auto_clean:

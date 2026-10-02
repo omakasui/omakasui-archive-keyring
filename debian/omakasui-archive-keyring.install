@@ -1,1 +1,2 @@
 build/omakasui-packages.gpg usr/share/keyrings
+build/omakasui.sources etc/apt/sources.list.d

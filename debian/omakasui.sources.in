@@ -1,0 +1,5 @@
+Types: deb
+URIs: https://packages.omakasui.org
+Suites: @SUITE@
+Components: main
+Signed-By: /usr/share/keyrings/omakasui-packages.gpg

@@ -11,16 +11,18 @@ Package: omakasui-archive-keyring
 Architecture: all
 Multi-Arch: foreign
 Depends: ${misc:Depends}
-Description: GPG keyring for the Omakasui packages repository
+Description: GPG keyring and APT source for the Omakasui packages repository
  Provides the public key used to authenticate packages from
- packages.omakasui.org, installed as /usr/share/keyrings/omakasui-packages.gpg.
+ packages.omakasui.org, installed as /usr/share/keyrings/omakasui-packages.gpg,
+ and the matching source /etc/apt/sources.list.d/omakasui.sources.
 
 Package: omakasui-core-archive-keyring
 Architecture: all
 Multi-Arch: foreign
-Depends: ${misc:Depends}
+Depends: omakasui-archive-keyring (>= 1.2.0), ${misc:Depends}
 Replaces: omakasui-archive-keyring (<< 1.1.0)
 Breaks: omakasui-archive-keyring (<< 1.1.0)
-Description: GPG keyring for the Omakasui core repository
+Description: GPG keyring and APT source for the Omakasui core repository
  Provides the public key used to authenticate packages from
- core.omakasui.org, installed as /usr/share/keyrings/omakasui-core.gpg.
+ core.omakasui.org, installed as /usr/share/keyrings/omakasui-core.gpg,
+ and the matching source /etc/apt/sources.list.d/omakasui-core.sources.

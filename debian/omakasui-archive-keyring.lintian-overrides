@@ -1,0 +1,2 @@
+# Third-party repository: installing its own APT source is the purpose of the package.
+omakasui-archive-keyring: package-installs-apt-sources [etc/apt/sources.list.d/omakasui.sources]
